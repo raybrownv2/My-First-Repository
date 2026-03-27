@@ -1,0 +1,370 @@
+{
+  "6758.T": {
+    "priceToBook": 2.3461118,
+    "returnOnEquity": 0.14917,
+    "debtToEquity": 19.449,
+    "trailingPE": 15.53243,
+    "revenueGrowth": 0.005,
+    "grossMargins": 0.29479
+  },
+  "6861.T": {
+    "priceToBook": 4.168617,
+    "returnOnEquity": null,
+    "debtToEquity": null,
+    "trailingPE": 34.00921,
+    "revenueGrowth": null,
+    "grossMargins": 0.0
+  },
+  "8035.T": {
+    "priceToBook": 8.981799,
+    "returnOnEquity": 0.26457,
+    "debtToEquity": null,
+    "trailingPE": 33.312984,
+    "revenueGrowth": -0.157,
+    "grossMargins": 0.45464
+  },
+  "6954.T": {
+    "priceToBook": 2.9773383,
+    "returnOnEquity": 0.093660004,
+    "debtToEquity": null,
+    "trailingPE": 33.93767,
+    "revenueGrowth": 0.095,
+    "grossMargins": 0.3787
+  },
+  "6971.T": {
+    "priceToBook": 0.9793642,
+    "returnOnEquity": 0.03185,
+    "debtToEquity": 10.173,
+    "trailingPE": 78.037834,
+    "revenueGrowth": 0.075,
+    "grossMargins": 0.28781
+  },
+  "6702.T": {
+    "priceToBook": 2.8691378,
+    "returnOnEquity": 0.16861,
+    "debtToEquity": 6.68,
+    "trailingPE": 20.071287,
+    "revenueGrowth": -0.043,
+    "grossMargins": 0.34667
+  },
+  "6501.T": {
+    "priceToBook": 3.355246,
+    "returnOnEquity": null,
+    "debtToEquity": 16.116,
+    "trailingPE": 28.193937,
+    "revenueGrowth": 0.101,
+    "grossMargins": 0.2969
+  },
+  "6503.T": {
+    "priceToBook": 2.6290708,
+    "returnOnEquity": 0.09513,
+    "debtToEquity": 8.262,
+    "trailingPE": 28.018486,
+    "revenueGrowth": 0.049,
+    "grossMargins": 0.31581
+  },
+  "6902.T": {
+    "priceToBook": 0.9941906,
+    "returnOnEquity": 0.07893,
+    "debtToEquity": 17.641,
+    "trailingPE": 15.361327,
+    "revenueGrowth": 0.05,
+    "grossMargins": 0.15587
+  },
+  "6594.T": {
+    "priceToBook": 1.355161,
+    "returnOnEquity": 0.06313,
+    "debtToEquity": 40.098,
+    "trailingPE": 19.837864,
+    "revenueGrowth": 0.029,
+    "grossMargins": 0.19373
+  },
+  "7203.T": {
+    "priceToBook": 1.1396571,
+    "returnOnEquity": 0.10032,
+    "debtToEquity": 105.339,
+    "trailingPE": 11.989446,
+    "revenueGrowth": 0.086,
+    "grossMargins": 0.17597
+  },
+  "7267.T": {
+    "priceToBook": 0.41843095,
+    "returnOnEquity": 0.042969998,
+    "debtToEquity": 106.013,
+    "trailingPE": 10.742344,
+    "revenueGrowth": -0.034,
+    "grossMargins": 0.20478001
+  },
+  "7270.T": {
+    "priceToBook": 0.67695165,
+    "returnOnEquity": 0.037639998,
+    "debtToEquity": 15.018,
+    "trailingPE": 7.167659,
+    "revenueGrowth": -0.108,
+    "grossMargins": 0.15704
+  },
+  "7011.T": {
+    "priceToBook": 5.796892,
+    "returnOnEquity": null,
+    "debtToEquity": 34.74,
+    "trailingPE": 56.366997,
+    "revenueGrowth": -0.029,
+    "grossMargins": 0.21104
+  },
+  "9984.T": {
+    "priceToBook": 1.4559199,
+    "returnOnEquity": 0.26023,
+    "debtToEquity": 132.434,
+    "trailingPE": 7.374598,
+    "revenueGrowth": 0.082,
+    "grossMargins": 0.5162
+  },
+  "9432.T": {
+    "priceToBook": 1.3662963,
+    "returnOnEquity": 0.10722999,
+    "debtToEquity": 281.535,
+    "trailingPE": 12.659235,
+    "revenueGrowth": 0.055,
+    "grossMargins": 0.27754998
+  },
+  "9433.T": {
+    "priceToBook": 2.0871434,
+    "returnOnEquity": 0.1423,
+    "debtToEquity": 91.493,
+    "trailingPE": 15.064174,
+    "revenueGrowth": 0.041,
+    "grossMargins": 0.41973
+  },
+  "6098.T": {
+    "priceToBook": 5.8752966,
+    "returnOnEquity": 0.2732,
+    "debtToEquity": 11.883,
+    "trailingPE": 21.956148,
+    "revenueGrowth": 0.052,
+    "grossMargins": 0.59079
+  },
+  "8306.T": {
+    "priceToBook": 1.440533,
+    "returnOnEquity": 0.06113,
+    "debtToEquity": null,
+    "trailingPE": 16.13766,
+    "revenueGrowth": 0.117,
+    "grossMargins": 0.0
+  },
+  "8316.T": {
+    "priceToBook": 1.2830716,
+    "returnOnEquity": 0.04933,
+    "debtToEquity": null,
+    "trailingPE": 14.044764,
+    "revenueGrowth": 0.218,
+    "grossMargins": 0.0
+  },
+  "8058.T": {
+    "priceToBook": 2.345713,
+    "returnOnEquity": 0.08528,
+    "debtToEquity": 69.116,
+    "trailingPE": 32.867493,
+    "revenueGrowth": 0.099,
+    "grossMargins": 0.085489996
+  },
+  "8031.T": {
+    "priceToBook": 2.2174437,
+    "returnOnEquity": 0.10781,
+    "debtToEquity": 66.98,
+    "trailingPE": 20.759928,
+    "revenueGrowth": -0.015,
+    "grossMargins": 0.0933
+  },
+  "8001.T": {
+    "priceToBook": 2.2867248,
+    "returnOnEquity": 0.14241,
+    "debtToEquity": 70.966,
+    "trailingPE": 15.507519,
+    "revenueGrowth": -0.003,
+    "grossMargins": 0.16572
+  },
+  "4063.T": {
+    "priceToBook": 2.6602647,
+    "returnOnEquity": 0.11484,
+    "debtToEquity": 5.422,
+    "trailingPE": 23.804909,
+    "revenueGrowth": -0.021,
+    "grossMargins": 0.35244
+  },
+  "4901.T": {
+    "priceToBook": 0.9758237,
+    "returnOnEquity": 0.07675,
+    "debtToEquity": 28.832,
+    "trailingPE": 13.400365,
+    "revenueGrowth": 0.055,
+    "grossMargins": 0.40543997
+  },
+  "3407.T": {
+    "priceToBook": 1.0620036,
+    "returnOnEquity": null,
+    "debtToEquity": 54.784,
+    "trailingPE": 15.198025,
+    "revenueGrowth": 0.008,
+    "grossMargins": 0.32491
+  },
+  "5401.T": {
+    "priceToBook": 0.5863809,
+    "returnOnEquity": -0.00414,
+    "debtToEquity": 89.929,
+    "trailingPE": null,
+    "revenueGrowth": 0.206,
+    "grossMargins": 0.1449
+  },
+  "5802.T": {
+    "priceToBook": 2.9725034,
+    "returnOnEquity": 0.110249996,
+    "debtToEquity": 30.16,
+    "trailingPE": 34.25103,
+    "revenueGrowth": null,
+    "grossMargins": 0.19844
+  },
+  "5108.T": {
+    "priceToBook": 1.1594951,
+    "returnOnEquity": 0.08636,
+    "debtToEquity": 22.232,
+    "trailingPE": 27.958979,
+    "revenueGrowth": 0.029,
+    "grossMargins": 0.38529998
+  },
+  "4519.T": {
+    "priceToBook": 6.9379344,
+    "returnOnEquity": 0.22103001,
+    "debtToEquity": null,
+    "trailingPE": 32.38897,
+    "revenueGrowth": 0.143,
+    "grossMargins": 0.71088
+  },
+  "4568.T": {
+    "priceToBook": 3.1706765,
+    "returnOnEquity": 0.18267,
+    "debtToEquity": 17.571,
+    "trailingPE": 19.602596,
+    "revenueGrowth": 0.151,
+    "grossMargins": 0.77538
+  },
+  "4502.T": {
+    "priceToBook": 1.2069751,
+    "returnOnEquity": 0.01503,
+    "debtToEquity": 70.93,
+    "trailingPE": 82.68442,
+    "revenueGrowth": 0.042,
+    "grossMargins": 0.65525
+  },
+  "4523.T": {
+    "priceToBook": 1.5719469,
+    "returnOnEquity": 0.04887,
+    "debtToEquity": 25.233,
+    "trailingPE": 28.312977,
+    "revenueGrowth": 0.018,
+    "grossMargins": 0.77751
+  },
+  "9983.T": {
+    "priceToBook": 7.569938,
+    "returnOnEquity": 0.20033,
+    "debtToEquity": 26.876,
+    "trailingPE": 43.795723,
+    "revenueGrowth": 0.148,
+    "grossMargins": 0.54032004
+  },
+  "3382.T": {
+    "priceToBook": 1.4456753,
+    "returnOnEquity": 0.085839994,
+    "debtToEquity": 104.406,
+    "trailingPE": 22.547981,
+    "revenueGrowth": -0.207,
+    "grossMargins": 0.16204001
+  },
+  "8267.T": {
+    "priceToBook": 4.584938,
+    "returnOnEquity": 0.03787,
+    "debtToEquity": 185.746,
+    "trailingPE": 170.72192,
+    "revenueGrowth": null,
+    "grossMargins": 0.34658
+  },
+  "2914.T": {
+    "priceToBook": 2.5968792,
+    "returnOnEquity": 0.12149999,
+    "debtToEquity": 45.787,
+    "trailingPE": 21.25889,
+    "revenueGrowth": null,
+    "grossMargins": 0.56193
+  },
+  "2802.T": {
+    "priceToBook": 5.8715873,
+    "returnOnEquity": 0.10297,
+    "debtToEquity": 68.579,
+    "trailingPE": 120.89671,
+    "revenueGrowth": 0.045,
+    "grossMargins": 0.37192002
+  },
+  "4911.T": {
+    "priceToBook": 2.1374896,
+    "returnOnEquity": -0.062329996,
+    "debtToEquity": 52.016,
+    "trailingPE": null,
+    "revenueGrowth": null,
+    "grossMargins": 0.76599
+  },
+  "8802.T": {
+    "priceToBook": 2.111371,
+    "returnOnEquity": 0.09404001,
+    "debtToEquity": 136.288,
+    "trailingPE": 27.845785,
+    "revenueGrowth": 0.148,
+    "grossMargins": 0.26413
+  },
+  "9020.T": {
+    "priceToBook": 1.3732291,
+    "returnOnEquity": 0.07711,
+    "debtToEquity": 158.718,
+    "trailingPE": 17.91081,
+    "revenueGrowth": 0.063,
+    "grossMargins": 0.35685003
+  },
+  "9022.T": {
+    "priceToBook": 0.8139982,
+    "returnOnEquity": 0.114300005,
+    "debtToEquity": 95.52,
+    "trailingPE": 7.9139795,
+    "revenueGrowth": 0.076,
+    "grossMargins": 0.5187
+  },
+  "4661.T": {
+    "priceToBook": 4.136427,
+    "returnOnEquity": null,
+    "debtToEquity": 31.377,
+    "trailingPE": 35.089874,
+    "revenueGrowth": 0.029,
+    "grossMargins": 0.0
+  },
+  "7741.T": {
+    "priceToBook": 8.977606,
+    "returnOnEquity": 0.24176,
+    "debtToEquity": 3.977,
+    "trailingPE": 44.961597,
+    "revenueGrowth": 0.105,
+    "grossMargins": 0.34080002
+  },
+  "7733.T": {
+    "priceToBook": 2.1783638,
+    "returnOnEquity": 0.11247,
+    "debtToEquity": 30.752,
+    "trailingPE": 17.718588,
+    "revenueGrowth": 0.039,
+    "grossMargins": 0.66236997
+  },
+  "4543.T": {
+    "priceToBook": 2.0653348,
+    "returnOnEquity": 0.08743,
+    "debtToEquity": 29.474,
+    "trailingPE": 24.062994,
+    "revenueGrowth": 0.126,
+    "grossMargins": 0.53326
+  }
+}
