@@ -1,19 +1,864 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>TipsNote : GitHub Pages Sample</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/marx/2.0.4/marx.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoInvest - 全自動投資システム</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #232635;
+    --border: #2e3248;
+    --accent: #5c73f2;
+    --accent2: #7c3aed;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .logo span { color: var(--text); }
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #16231a;
+    border: 1px solid #22c55e44;
+    color: var(--green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .grid-full { margin-bottom: 20px; }
+  @media (max-width: 768px) {
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .card-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .card-sub {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  .neutral { color: var(--text2); }
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--accent2);
+    color: white;
+  }
+  .badge-green { background: #16231a; color: var(--green); border: 1px solid #22c55e33; }
+  /* Chart */
+  .chart-wrap { position: relative; height: 200px; }
+  canvas { width: 100%; height: 100%; }
+  /* Allocation */
+  .alloc-list { display: flex; flex-direction: column; gap: 12px; }
+  .alloc-item { }
+  .alloc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .alloc-name { font-weight: 600; font-size: 13px; }
+  .alloc-pct {
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .bar-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+  .bar-target {
+    position: absolute;
+    top: -2px;
+    height: 10px;
+    width: 2px;
+    background: white;
+    opacity: 0.5;
+    border-radius: 1px;
+  }
+  /* Strategy controls */
+  .form-group { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  input[type=number], select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type=number]:focus, select:focus {
+    border-color: var(--accent);
+  }
+  .range-row { display: flex; align-items: center; gap: 10px; }
+  .range-val {
+    min-width: 40px;
+    text-align: right;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 13px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover { background: #4a60e8; }
+  .btn-danger {
+    background: #2a1515;
+    color: var(--red);
+    border: 1px solid #ef444433;
+  }
+  .btn-danger:hover { background: #3a1515; }
+  .btn-success {
+    background: #16231a;
+    color: var(--green);
+    border: 1px solid #22c55e33;
+  }
+  .btn-success:hover { background: #1e2e22; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  /* Log */
+  .log-wrap {
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  .log-entry {
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-time { color: var(--text3); min-width: 130px; }
+  .log-msg { color: var(--text2); }
+  .log-msg.buy { color: var(--green); }
+  .log-msg.sell { color: var(--red); }
+  .log-msg.info { color: var(--accent); }
+  .log-msg.warn { color: var(--yellow); }
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    text-align: left;
+    color: var(--text3);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+  td.asset-name { color: var(--text); font-weight: 600; }
+  /* Sim controls */
+  .sim-speed-wrap { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); }
+  .speed-btn {
+    padding: 4px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .speed-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+  /* toggle */
+  .toggle-wrap { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--surface2);
+    border-radius: 22px;
+    border: 1px solid var(--border);
+    transition: 0.3s;
+  }
+  .toggle-slider:before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--text3);
+    top: 2px;
+    left: 2px;
+    transition: 0.3s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--accent); border-color: var(--accent); }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(18px); background: white; }
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .info-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
+  .info-row span:first-child { color: var(--text2); }
+  .info-row span:last-child { font-weight: 600; }
+</style>
 </head>
-
 <body>
-<main>
-  <h1>GitHub Pages のサンプルです</h1>
-  <a href="http://www.tam-tam.co.jp/tipsnote/"><button>TipsNote に戻る</button></a>
-</main>
+<header>
+  <div class="logo">⚡ Auto<span>Invest</span></div>
+  <div style="display:flex; align-items:center; gap:16px;">
+    <div id="simDateDisplay" style="font-size:13px; color:var(--text2);">2026-01-01</div>
+    <div class="status-badge"><div class="dot"></div> 自動運用中</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPI cards -->
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">総資産評価額</div>
+      <div class="card-value" id="totalValue">¥0</div>
+      <div class="card-sub" id="totalReturn">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">累計損益</div>
+      <div class="card-value" id="totalPnl">¥0</div>
+      <div class="card-sub" id="totalPnlPct">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">自動リバランス回数</div>
+      <div class="card-value" id="rebalCount">0</div>
+      <div class="card-sub neutral" id="lastRebal">まだ未実施</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Performance chart -->
+    <div class="card">
+      <div class="section-title">📈 ポートフォリオ推移</div>
+      <div class="chart-wrap">
+        <canvas id="perfChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Current allocation -->
+    <div class="card">
+      <div class="section-title">🎯 資産配分（現在 vs 目標）</div>
+      <div class="alloc-list" id="allocList"></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Holdings table -->
+    <div class="card">
+      <div class="section-title">💼 保有資産</div>
+      <table id="holdingsTable">
+        <thead>
+          <tr>
+            <th>銘柄</th>
+            <th>口数</th>
+            <th>評価額</th>
+            <th>損益</th>
+          </tr>
+        </thead>
+        <tbody id="holdingsTbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Strategy settings -->
+    <div class="card">
+      <div class="section-title">⚙️ 投資戦略設定</div>
+
+      <div class="form-group">
+        <label>戦略タイプ</label>
+        <select id="strategySelect">
+          <option value="passive">パッシブ（インデックス積立）</option>
+          <option value="balanced">バランス型（株式+債券）</option>
+          <option value="growth">グロース型（高成長重視）</option>
+          <option value="custom">カスタム</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>月次積立額</label>
+        <input type="number" id="monthlyInput" value="50000" min="0" step="1000">
+      </div>
+
+      <div class="form-group">
+        <label>リバランス閾値（目標乖離率）
+          <span style="color:var(--text3); font-size:11px;">— この%を超えると自動リバランス</span>
+        </label>
+        <div class="range-row">
+          <input type="range" id="rebalThreshSlider" min="1" max="20" value="5">
+          <div class="range-val" id="rebalThreshVal">5%</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>シミュレーション速度</label>
+        <div class="sim-speed-wrap">
+          <button class="speed-btn active" data-speed="1000">×1</button>
+          <button class="speed-btn" data-speed="400">×3</button>
+          <button class="speed-btn" data-speed="100">×10</button>
+          <button class="speed-btn" data-speed="20">×50</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="btn-row">
+        <button class="btn btn-success" id="startBtn">▶ 運用開始</button>
+        <button class="btn btn-danger" id="stopBtn">⏸ 一時停止</button>
+        <button class="btn btn-primary" id="resetBtn">↺ リセット</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auto log -->
+  <div class="card grid-full">
+    <div class="section-title">🤖 自動取引ログ <span class="badge">LIVE</span></div>
+    <div class="log-wrap" id="logWrap">
+      <div class="log-entry">
+        <span class="log-time">—</span>
+        <span class="log-msg info">システム初期化完了。運用開始ボタンを押してください。</span>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <script>
-console.log('GitHub Pages Sample');
+// ==================== ASSET DEFINITIONS ====================
+const STRATEGIES = {
+  passive: {
+    name: 'パッシブ（インデックス積立）',
+    assets: [
+      { id: 'sp500',   name: 'S&P500 ETF',      target: 40, color: '#5c73f2', drift: 0.0008, vol: 0.012 },
+      { id: 'topix',   name: 'TOPIX ETF',        target: 25, color: '#7c3aed', drift: 0.0005, vol: 0.011 },
+      { id: 'em',      name: '新興国株式ETF',     target: 15, color: '#06b6d4', drift: 0.0006, vol: 0.015 },
+      { id: 'bond',    name: '先進国債券ETF',      target: 15, color: '#22c55e', drift: 0.0002, vol: 0.004 },
+      { id: 'reit',    name: 'J-REIT ETF',        target:  5, color: '#f59e0b', drift: 0.0003, vol: 0.009 },
+    ]
+  },
+  balanced: {
+    name: 'バランス型',
+    assets: [
+      { id: 'sp500',   name: 'S&P500 ETF',        target: 30, color: '#5c73f2', drift: 0.0008, vol: 0.012 },
+      { id: 'topix',   name: 'TOPIX ETF',          target: 20, color: '#7c3aed', drift: 0.0005, vol: 0.011 },
+      { id: 'bond',    name: '先進国債券ETF',        target: 30, color: '#22c55e', drift: 0.0002, vol: 0.004 },
+      { id: 'gold',    name: 'ゴールドETF',          target: 10, color: '#f59e0b', drift: 0.0003, vol: 0.008 },
+      { id: 'cash',    name: '短期国債（現金同等）',  target: 10, color: '#64748b', drift: 0.0001, vol: 0.001 },
+    ]
+  },
+  growth: {
+    name: 'グロース型',
+    assets: [
+      { id: 'sp500',   name: 'S&P500 ETF',         target: 45, color: '#5c73f2', drift: 0.0008, vol: 0.012 },
+      { id: 'qqq',     name: 'NASDAQ100 ETF',       target: 30, color: '#ec4899', drift: 0.0012, vol: 0.018 },
+      { id: 'em',      name: '新興国株式ETF',        target: 15, color: '#06b6d4', drift: 0.0006, vol: 0.015 },
+      { id: 'reit',    name: 'J-REIT ETF',           target:  5, color: '#f59e0b', drift: 0.0003, vol: 0.009 },
+      { id: 'bond',    name: '先進国債券ETF',         target:  5, color: '#22c55e', drift: 0.0002, vol: 0.004 },
+    ]
+  },
+  custom: {
+    name: 'カスタム',
+    assets: [
+      { id: 'sp500',   name: 'S&P500 ETF',    target: 35, color: '#5c73f2', drift: 0.0008, vol: 0.012 },
+      { id: 'topix',   name: 'TOPIX ETF',     target: 20, color: '#7c3aed', drift: 0.0005, vol: 0.011 },
+      { id: 'qqq',     name: 'NASDAQ100 ETF', target: 20, color: '#ec4899', drift: 0.0012, vol: 0.018 },
+      { id: 'bond',    name: '先進国債券ETF',   target: 15, color: '#22c55e', drift: 0.0002, vol: 0.004 },
+      { id: 'gold',    name: 'ゴールドETF',     target: 10, color: '#f59e0b', drift: 0.0003, vol: 0.008 },
+    ]
+  }
+};
+
+// ==================== STATE ====================
+let state = {};
+let timer = null;
+let simSpeed = 1000;
+
+function initState() {
+  const strategy = document.getElementById('strategySelect').value;
+  const monthly = parseInt(document.getElementById('monthlyInput').value) || 50000;
+  const initial = 1000000; // ¥1M initial investment
+
+  const assets = STRATEGIES[strategy].assets.map(a => ({
+    ...a,
+    price: 10000,      // start price
+    units: 0,
+    costBasis: 0,
+  }));
+
+  // Allocate initial investment
+  assets.forEach(a => {
+    const invest = initial * a.target / 100;
+    a.units = invest / a.price;
+    a.costBasis = invest;
+  });
+
+  state = {
+    strategy,
+    assets,
+    monthly,
+    rebalThresh: parseInt(document.getElementById('rebalThreshSlider').value),
+    initialValue: initial,
+    totalInvested: initial,
+    rebalCount: 0,
+    lastRebalDate: null,
+    simDate: new Date(2026, 0, 1),
+    dayIndex: 0,
+    perfHistory: [{ date: '2026-01-01', value: initial }],
+    logEntries: [],
+    running: false,
+    monthAccum: 0,
+  };
+
+  addLog('info', 'システム初期化完了。初期投資: ' + fmt(initial));
+  addLog('info', '戦略: ' + STRATEGIES[strategy].name + ' | 月次積立: ' + fmt(monthly));
+  renderAll();
+}
+
+// ==================== SIMULATION ====================
+function tick() {
+  if (!state.running) return;
+
+  const s = state;
+  s.simDate = new Date(s.simDate.getTime() + 86400000);
+  s.dayIndex++;
+
+  // Market simulation: correlated random walk with occasional shocks
+  const marketShock = Math.random() < 0.02 ? (Math.random() - 0.5) * 0.06 : 0;
+  s.assets.forEach(a => {
+    const dailyReturn = a.drift + a.vol * randn() + marketShock * 0.7;
+    a.price = Math.max(100, a.price * (1 + dailyReturn));
+  });
+
+  // Monthly contributions on the 1st of each month
+  if (s.simDate.getDate() === 1) {
+    s.monthAccum++;
+    distributeMonthly();
+  }
+
+  // Check rebalancing need
+  checkRebalance();
+
+  // Record performance weekly
+  if (s.dayIndex % 7 === 0) {
+    const dateStr = formatDate(s.simDate);
+    s.perfHistory.push({ date: dateStr, value: totalValue() });
+    document.getElementById('simDateDisplay').textContent = dateStr;
+  }
+
+  renderAll();
+}
+
+function distributeMonthly() {
+  const s = state;
+  const monthly = s.monthly;
+  s.totalInvested += monthly;
+  s.assets.forEach(a => {
+    const invest = monthly * a.target / 100;
+    const newUnits = invest / a.price;
+    a.units += newUnits;
+    a.costBasis += invest;
+  });
+  addLog('buy', `月次積立 ${fmt(monthly)} を自動購入 [${STRATEGIES[s.strategy].assets.map(a=>a.name.split(' ')[0]).join(', ')}]`);
+}
+
+function checkRebalance() {
+  const s = state;
+  const tv = totalValue();
+  let maxDrift = 0;
+  let driftAsset = '';
+  s.assets.forEach(a => {
+    const actual = (a.units * a.price / tv) * 100;
+    const drift = Math.abs(actual - a.target);
+    if (drift > maxDrift) { maxDrift = drift; driftAsset = a.name; }
+  });
+  if (maxDrift > s.rebalThresh) {
+    doRebalance(tv);
+  }
+}
+
+function doRebalance(tv) {
+  const s = state;
+  const dateStr = formatDate(s.simDate);
+  const trades = [];
+  s.assets.forEach(a => {
+    const targetVal = tv * a.target / 100;
+    const currentVal = a.units * a.price;
+    const diff = targetVal - currentVal;
+    if (Math.abs(diff) > 1000) {
+      const unitsChange = diff / a.price;
+      a.units += unitsChange;
+      a.costBasis += diff;
+      const action = diff > 0 ? '買増' : '売却';
+      trades.push(`${a.name.split(' ')[0]} ${action} ${fmt(Math.abs(diff))}`);
+    }
+  });
+  s.rebalCount++;
+  s.lastRebalDate = dateStr;
+  if (trades.length > 0) {
+    addLog('warn', `[リバランス #${s.rebalCount}] ` + trades.join(' / '));
+  }
+}
+
+// ==================== HELPERS ====================
+function randn() {
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+function totalValue() {
+  return state.assets.reduce((s, a) => s + a.units * a.price, 0);
+}
+function fmt(n) {
+  return '¥' + Math.round(n).toLocaleString('ja-JP');
+}
+function fmtPct(n) {
+  return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+}
+function formatDate(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function addLog(type, msg) {
+  const dateStr = formatDate(state.simDate);
+  state.logEntries.unshift({ time: dateStr, type, msg });
+  if (state.logEntries.length > 200) state.logEntries.pop();
+  renderLog();
+}
+
+// ==================== RENDER ====================
+function renderAll() {
+  renderKPIs();
+  renderAllocList();
+  renderHoldings();
+  renderChart();
+}
+
+function renderKPIs() {
+  const tv = totalValue();
+  const pnl = tv - state.totalInvested;
+  const pnlPct = (pnl / state.totalInvested) * 100;
+
+  document.getElementById('totalValue').textContent = fmt(tv);
+  const retEl = document.getElementById('totalReturn');
+  retEl.textContent = '投資元本: ' + fmt(state.totalInvested);
+  retEl.className = 'card-sub neutral';
+
+  const pnlEl = document.getElementById('totalPnl');
+  pnlEl.textContent = fmt(pnl);
+  pnlEl.className = 'card-value ' + (pnl >= 0 ? 'up' : 'down');
+
+  const pnlPctEl = document.getElementById('totalPnlPct');
+  pnlPctEl.textContent = fmtPct(pnlPct);
+  pnlPctEl.className = 'card-sub ' + (pnl >= 0 ? 'up' : 'down');
+
+  document.getElementById('rebalCount').textContent = state.rebalCount;
+  const lrEl = document.getElementById('lastRebal');
+  lrEl.textContent = state.lastRebalDate ? '最終: ' + state.lastRebalDate : 'まだ未実施';
+}
+
+function renderAllocList() {
+  const tv = totalValue();
+  const colors = state.assets.map(a => a.color);
+  let html = '';
+  state.assets.forEach((a, i) => {
+    const actual = (a.units * a.price / tv) * 100;
+    const drift = actual - a.target;
+    html += `<div class="alloc-item">
+      <div class="alloc-header">
+        <span class="alloc-name" style="color:${a.color}">${a.name}</span>
+        <span class="alloc-pct">実際 <b>${actual.toFixed(1)}%</b> / 目標 ${a.target}%
+          <span style="margin-left:6px; font-size:11px; color:${Math.abs(drift)>state.rebalThresh?'var(--red)':'var(--text3)'}">${drift>=0?'+':''}${drift.toFixed(1)}%</span>
+        </span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${Math.min(100,actual)}%; background:${a.color}"></div>
+        <div class="bar-target" style="left:${a.target}%"></div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('allocList').innerHTML = html;
+}
+
+function renderHoldings() {
+  const tv = totalValue();
+  let html = '';
+  state.assets.forEach(a => {
+    const val = a.units * a.price;
+    const pnl = val - a.costBasis;
+    const pnlPct = (pnl / a.costBasis) * 100;
+    const cls = pnl >= 0 ? 'up' : 'down';
+    html += `<tr>
+      <td class="asset-name" style="border-left: 3px solid ${a.color}; padding-left:8px">${a.name}</td>
+      <td>${a.units.toFixed(3)}</td>
+      <td>${fmt(val)}</td>
+      <td class="${cls}">${fmt(pnl)}<br><span style="font-size:11px">${fmtPct(pnlPct)}</span></td>
+    </tr>`;
+  });
+  document.getElementById('holdingsTbody').innerHTML = html;
+}
+
+function renderLog() {
+  const wrap = document.getElementById('logWrap');
+  wrap.innerHTML = state.logEntries.slice(0, 50).map(e =>
+    `<div class="log-entry">
+      <span class="log-time">${e.time}</span>
+      <span class="log-msg ${e.type}">${e.msg}</span>
+    </div>`
+  ).join('');
+}
+
+// ==================== CHART ====================
+function renderChart() {
+  const canvas = document.getElementById('perfChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width, H = rect.height;
+  const pad = { t: 16, r: 16, b: 28, l: 70 };
+  const innerW = W - pad.l - pad.r;
+  const innerH = H - pad.t - pad.b;
+
+  const hist = state.perfHistory;
+  if (hist.length < 2) return;
+
+  const vals = hist.map(h => h.value);
+  const minV = Math.min(...vals) * 0.98;
+  const maxV = Math.max(...vals) * 1.02;
+
+  const xOf = i => pad.l + (i / (hist.length - 1)) * innerW;
+  const yOf = v => pad.t + innerH - ((v - minV) / (maxV - minV)) * innerH;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid
+  ctx.strokeStyle = '#2e3248';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (i / 4) * innerH;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    const val = maxV - (i / 4) * (maxV - minV);
+    ctx.fillStyle = '#64748b';
+    ctx.font = '10px system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillText((val / 10000).toFixed(0) + '万', pad.l - 6, y + 4);
+  }
+
+  // Baseline (initial investment)
+  const baseY = yOf(state.initialValue);
+  ctx.strokeStyle = '#2e3248';
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(pad.l, baseY); ctx.lineTo(W - pad.r, baseY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Fill gradient
+  const grad = ctx.createLinearGradient(0, pad.t, 0, H - pad.b);
+  const lastVal = vals[vals.length - 1];
+  const isUp = lastVal >= state.initialValue;
+  grad.addColorStop(0, isUp ? '#22c55e44' : '#ef444433');
+  grad.addColorStop(1, '#00000000');
+  ctx.beginPath();
+  ctx.moveTo(xOf(0), yOf(hist[0].value));
+  hist.forEach((h, i) => ctx.lineTo(xOf(i), yOf(h.value)));
+  ctx.lineTo(xOf(hist.length - 1), H - pad.b);
+  ctx.lineTo(xOf(0), H - pad.b);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = isUp ? '#22c55e' : '#ef4444';
+  ctx.lineWidth = 2;
+  hist.forEach((h, i) => {
+    i === 0 ? ctx.moveTo(xOf(0), yOf(h.value)) : ctx.lineTo(xOf(i), yOf(h.value));
+  });
+  ctx.stroke();
+
+  // X-axis labels
+  ctx.fillStyle = '#64748b';
+  ctx.font = '10px system-ui';
+  ctx.textAlign = 'center';
+  const step = Math.max(1, Math.floor(hist.length / 5));
+  for (let i = 0; i < hist.length; i += step) {
+    ctx.fillText(hist[i].date.slice(5), xOf(i), H - pad.b + 14);
+  }
+}
+
+// ==================== CONTROLS ====================
+document.getElementById('startBtn').addEventListener('click', () => {
+  if (!state.assets) initState();
+  state.running = true;
+  clearInterval(timer);
+  timer = setInterval(tick, simSpeed);
+  addLog('info', '自動運用を開始しました。');
+});
+
+document.getElementById('stopBtn').addEventListener('click', () => {
+  state.running = false;
+  clearInterval(timer);
+  addLog('info', '自動運用を一時停止しました。');
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  clearInterval(timer);
+  timer = null;
+  initState();
+});
+
+document.getElementById('rebalThreshSlider').addEventListener('input', function() {
+  document.getElementById('rebalThreshVal').textContent = this.value + '%';
+  if (state.assets) state.rebalThresh = parseInt(this.value);
+});
+
+document.getElementById('strategySelect').addEventListener('change', () => {
+  clearInterval(timer);
+  timer = null;
+  initState();
+});
+
+document.querySelectorAll('.speed-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    simSpeed = parseInt(this.dataset.speed);
+    if (state.running) {
+      clearInterval(timer);
+      timer = setInterval(tick, simSpeed);
+    }
+  });
+});
+
+window.addEventListener('resize', () => { if (state.assets) renderChart(); });
+
+// Init on load
+initState();
 </script>
 </body>
 </html>
