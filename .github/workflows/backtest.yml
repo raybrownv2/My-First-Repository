@@ -1,0 +1,65 @@
+name: 日本株バックテスト
+
+on:
+  # GitHubのActionsタブから手動実行
+  workflow_dispatch:
+    inputs:
+      n_stocks:
+        description: '保有銘柄数（デフォルト: 10）'
+        required: false
+        default: '10'
+      refresh:
+        description: 'データ再取得（true/false）'
+        required: false
+        default: 'false'
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ── 1. リポジトリをチェックアウト ──
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Python セットアップ ──
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ── 3. 依存パッケージインストール ──
+      - name: 依存パッケージインストール
+        run: pip install -r requirements.txt
+
+      # ── 4. バックテスト実行 ──
+      - name: バックテスト実行
+        run: |
+          REFRESH_FLAG=""
+          if [ "${{ github.event.inputs.refresh }}" = "true" ]; then
+            REFRESH_FLAG="--refresh"
+          fi
+          python -m backtest.main \
+            --stocks ${{ github.event.inputs.n_stocks || '10' }} \
+            $REFRESH_FLAG
+
+      # ── 5. 結果をArtifactとしてアップロード ──
+      - name: 結果アップロード
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-results
+          path: results/
+          retention-days: 90
+
+      # ── 6. 結果をリポジトリにコミット ──
+      - name: 結果をコミット
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/
+          git diff --staged --quiet || git commit -m "backtest: $(date +'%Y-%m-%d') 結果を更新"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
